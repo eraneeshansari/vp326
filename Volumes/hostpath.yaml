@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: myhp
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: myapp
@@ -12,6 +12,8 @@ spec:
       labels:
         app: myapp
     spec:
+      securityContext:
+        fsGroup: 1001 
       containers:
       - name: con1
         image: nginx:latest
@@ -20,16 +22,16 @@ spec:
         volumeMounts:
         - name: myvol
           mountPath: /app/
-      - name: con2
-        image: tomcat:latest
-        ports:
-        - containerPort: 8080
-        volumeMounts:
-        - name: myvol
-          mountPath: /app/
+#      - name: con2
+#        image: tomcat:latest
+#        ports:
+#        - containerPort: 8080
+#        volumeMounts:
+#        - name: myvol
+#          mountPath: /app/
       volumes:
       - name: myvol
         hostPath:
-          path: /myapp
+          path: /tmp
 
-
+#
