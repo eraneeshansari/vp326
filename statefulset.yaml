@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dbapp
+spec:
+  serviceName: "dbapp"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dbapp
+  template:
+    metadata:
+      labels:
+        app: dbapp
+    spec:
+      containers:
+      - name: dbapp
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: dbapp-storage
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: dbapp-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbapp
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: dbapp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  

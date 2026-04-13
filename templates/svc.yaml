@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  description: Exposes the application server to other services in the cluster
+  name: myapp-svc
+spec:
+ ports:
+ - name: web
+   port: 80
+   targetPort: 80
+   selector:
+     app: myapp
+
