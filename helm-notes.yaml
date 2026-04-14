@@ -1,0 +1,32 @@
+# oc new-project helmdemo
+
+#helm repo add bitnami https://charts.bitnami.com/bitnami
+
+helm repo update 
+
+helm search repo MySQL
+
+helm search repo bitnami/mysql --versions   ##list all versions 
+
+# Search in Artifact Hub (online)
+helm search hub <chart-name>
+
+
+#  helm install wordpress bitnami/wordpress --set wordpressUsername=aneesh --set resources.requests.cpu=1 --set resources.limits.cpu=1 --set wordpressPassword=test123 --set global.defaultStorageClass=crc-csi-hostpath-provisioner
+
+
+# allow root user inside container.
+
+helm install wordpress bitnami/wordpress \
+  --set wordpressUsername=aneesh \
+  --set wordpressPassword=test123 \
+  --set global.defaultStorageClass=crc-csi-hostpath-provisioner 
+  
+
+helm upgrade wordpress bitnami/wordpress
+
+
+helm history wordpress
+
+helm rollback wordpress 1
+

@@ -1,0 +1,27 @@
+
+Create image stream and add external image to it.
+
+oc create is mangois
+
+oc import-image mangois --from=docker.io/library/nginx:1.20 --confirm
+
+oc import image vs oc tag command vs oc mirror  
+
+# oc TAG
+oc tag mangois:1.20 mangois:latest
+
+oc delete imagetag mangois:latest
+
+
+### oc get route #to get local image registry URL
+
+oc get routes.route.openshift.io -n openshift-image-registry
+
+#mirror image 
+
+$ oc image mirror docker.io/library/nginx:1.21 default-route-openshift-image-registry.apps-crc.testing/default/mangois:1.21 --filter-by-os=linux/amd64 --insecure=true
+
+oc tag mangois:1.21 mangois:latest
+
+oc describe is mangois
+
