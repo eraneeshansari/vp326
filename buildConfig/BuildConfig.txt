@@ -1,0 +1,114 @@
+OPENSHIFT BUILD TRIGGER USING SERVICE ACCOUNT + GITHUB ACTIONS
+
+Deploy APP 
+oc new-app https://github.com/eraneeshansari/nationalparks.git
+
+STEP 1: Create Service Account
+
+oc create sa webhook-user
+
+STEP 2: Verify Service Account
+
+oc get sa webhook-user
+
+STEP 3: Grant Required Permissions (RBAC)
+
+oc adm policy add-role-to-user edit system:serviceaccount:er-aneeshansari-dev:webhook-user
+
+oc adm policy add-role-to-user system:image-builder system:serviceaccount:er-aneeshansari-dev:webhook-user
+
+oc adm policy add-role-to-user system:image-puller system:serviceaccount:er-aneeshansari-dev:webhook-user
+
+STEP 4: Generate Token for Service Account
+
+temp token 
+oc create token webhook-user --duration=24h
+
+persistent TOKEN in SA 
+
+vi secret-webhook-user.yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: webhook-user-token
+  labels:
+     app: nationalparks
+  annotations:
+    kubernetes.io/service-account.name: webhook-user
+type: kubernetes.io/service-account-token
+
+oc create -f secret-webhook-user.yaml
+
+oc describe sa webhook-user
+
+STEP 5: Store Token
+
+TOKEN=
+
+##oc set triggers bc/nationalparks --from-github --remove
+oc set triggers bc/nationalparks --from-GitHub
+
+
+STEP 6: Test CURL Command
+
+curl -k -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "kind": "BuildRequest",
+    "apiVersion": "build.openshift.io/v1",
+    "metadata": {
+      "name": "nationalparks"
+    }
+  }' \
+  "https://api.rm2.thpm.p1.openshiftapps.com:6443/apis/build.openshift.io/v1/namespaces/er-aneeshansari-dev/buildconfigs/nationalparks/instantiate"
+
+## point /instantiate = allowed authenticated API call 
+webhook anonymous user access blocked
+
+STEP 7: Verify Build
+
+oc get builds -w
+
+########## Now using GitHub Actions / webhooks ################
+
+STEP 8: Add Token in GitHub
+
+oc get secrets webhook-user-token -o yaml
+
+TOKEN=""
+
+Settings → Secrets → Actions → Add OPENSHIFT_TOKEN
+
+STEP 9: GitHub Actions YAML
+
+name: Trigger OpenShift Build
+
+on: push: branches: - master
+
+jobs: trigger-build: runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger OpenShift Build
+        run: |
+          curl -k -X POST \
+            -H "Authorization: Bearer ${{ secrets.OPENSHIFT_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "kind": "BuildRequest",
+              "apiVersion": "build.openshift.io/v1",
+              "metadata": {
+                "name": "nationalparks"
+              }
+            }' \
+            "https://api.rm2.thpm.p1.openshiftapps.com:6443/apis/build.openshift.io/v1/namespaces/er-aneeshansari-dev/buildconfigs/nationalparks/instantiate"
+
+STEP 10: Push Code
+
+git add . git commit -m “Trigger build” git push origin master
+
+FLOW
+
+GitHub → Actions → OpenShift Build
+
