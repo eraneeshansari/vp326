@@ -1,0 +1,61 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"mangois:latest","namespace":"default"},"fieldPath":"spec.template.spec.containers[?(@.name==\"mangois\")].image"}]'
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: myapp
+      app.kubernetes.io/component: myapp
+      app.kubernetes.io/instance: myapp
+      app.kubernetes.io/name: mangois
+    name: myapp
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        deployment: myapp
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deployment: myapp
+      spec:
+        containers:
+        - image: ' '
+          name: mangois
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: myapp
+      app.kubernetes.io/component: myapp
+      app.kubernetes.io/instance: myapp
+      app.kubernetes.io/name: mangois
+    name: myapp
+  spec:
+    ports:
+    - name: 80-tcp
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      deployment: myapp
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

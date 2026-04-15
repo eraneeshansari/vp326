@@ -19,4 +19,6 @@ spec:
      value: wpdb
    ports:
    - containerPort: 3306
-
+# nodeName: crc
+  nodeSelector:
+    node: green

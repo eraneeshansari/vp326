@@ -17,7 +17,7 @@ oc delete imagetag mangois:latest
 
 oc get routes.route.openshift.io -n openshift-image-registry
 
-#mirror image 
+#mirror image Copy/Download image in imageStream 
 
 $ oc image mirror docker.io/library/nginx:1.21 default-route-openshift-image-registry.apps-crc.testing/default/mangois:1.21 --filter-by-os=linux/amd64 --insecure=true
 
@@ -25,3 +25,32 @@ oc tag mangois:1.21 mangois:latest
 
 oc describe is mangois
 
+
+# check SHA value remotely available image
+
+oc image info docker.io/library/nginx:1.29.8
+
+
+#########################	Description import vs mirror	#######################################
+
+oc import-image
+
+ “Keep a reference + tracking of the original image”
+
+Stores where the image came from (e.g. docker.io/nginx:1.20)
+OpenShift can auto-update if image changes
+Used for triggers (build/deploy)
+
+# Reference + Tracking
+
+# oc image mirror
+
+ “Just copy/download the image locally into OpenShift registry”
+
+Image is stored inside cluster 
+No reference to original source
+No auto-update
+No tracking
+Only Copy (no tracking)
+
+######################################################################
