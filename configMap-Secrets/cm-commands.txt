@@ -1,0 +1,18 @@
+oc new-app --name myapp --image nginx
+oc set env deploy myapp USER=admin APP_NAME=myapp
+oc set env deploy myapp USER-
+history
+oc get pods
+oc rollout restart deploy myapp
+
+   oc new-app --name myapp --image nginx
+   oc get pods
+   oc set volumes deploy myapp --add --name=cm-vol --type configmap --mount-path=/usr/share/nginx/html
+   #oc set volumes deploy myapp --add --name=cm-vol --type=configmap --configmap-name --mount-path=/usr/share/nginx/html
+   oc get cm
+   oc set volumes deploy myapp --add --name=cm-vol --type=configmap --configmap-name=ngapp --mount-path=/usr/share/nginx/html
+   oc set volumes deploy myapp --remove --name=cm-vol
+   oc set volumes deploy myapp --add --name=cm-vol --type=configmap --configmap-name=ngapp --mount-path=//usr/share/nginx/html
+   oc expose svc myapp
+   oc get routes.route.openshift.io
+

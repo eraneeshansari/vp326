@@ -1,0 +1,36 @@
+oc set probe deployment/nginx \
+--liveness \
+--get-url=http://:80 \
+--initial-delay-seconds=10 \
+--period-seconds=5
+
+
+oc set probe deployment/nginx \
+--readiness \
+--get-url=http://:80 \
+--initial-delay-seconds=5 \
+--period-seconds=5
+
+oc set probe deployment/nginx --liveness --remove
+
+oc set probe deployment/nginx --readiness --remove
+
+oc set probe deployment/nginx \
+--liveness \
+--get-url=http://:80 \
+--initial-delay-seconds=10 \
+--period-seconds=5
+
+
+oc set probe deployment/nginx \
+--readiness \
+--get-url=http://:80 \
+--initial-delay-seconds=5 \
+--period-seconds=5
+
+oc set probe deployment/nginx --liveness --remove
+
+oc set probe deployment/nginx --readiness --remove
+
+
+
