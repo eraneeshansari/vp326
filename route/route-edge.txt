@@ -1,0 +1,12 @@
+openssl req -x509 -newkey rsa:2048 -nodes -keyout tls.key -out tls.crt -days 365 -subj "//CN=tlsapp.apps-crc.testing"
+
+read certificate details 
+openssl x509 -in tls.crt -text -noout
+######################################################################################################################
+
+##### use certificate in Route Edge 
+
+oc create route edge --service=nginx --hostname=tlsapp.apps-crc.testing --cert=tls.crt --key=tls.key
+
+
+

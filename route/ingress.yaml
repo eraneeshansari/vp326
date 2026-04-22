@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    haproxy.router.openshift.io/rewrite-target: /
+  creationTimestamp: "2026-04-22T03:54:45Z"
+  generation: 2
+  name: myapp
+  namespace: default
+  resourceVersion: "1777850"
+  uid: 390348fb-0ac5-41f4-9198-949ac6a15503
+spec:
+  rules:
+  - host: myapp.apps-crc.testing
+    http:
+      paths:
+      - backend:
+          service:
+            name: myapp
+            port:
+              number: 80
+        path: /shop
+        pathType: Prefix
+

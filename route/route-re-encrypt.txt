@@ -1,0 +1,86 @@
+Client --- HTTPS ---> Router --- HTTPS (new TLS) ---> Pod
+
+Key Points
+
+Router decrypts incoming TLS.
+Router establishes new TLS connection to backend.
+Requires destination CA certificate to verify backend service.
+Provides secure end-to-end encryption with router inspection.
+
+Use Case
+
+When security requires TLS between router and pod.
+When backend services already support HTTPS.
+
+1. Generate Backend Certificate (for Pod) and define CN=app's FQDN internal 
+
+openssl req -x509 -newkey rsa:2048 -nodes \
+-keyout backend.key -out backend.crt -days 365 \
+-subj "/CN=nginx.default.svc"
+
+1.1 store certificate in secrets 
+
+oc create secret tls backend-tls --cert=backend.crt --key=backend.key
+
+2. Create NGINX HTTPS Config
+
+oc create configmap nginx-conf --from-literal=nginx.conf='
+events {}
+http {
+  server {
+    listen 8443 ssl;
+
+    ssl_certificate /etc/nginx/tls/tls.crt;
+    ssl_certificate_key /etc/nginx/tls/tls.key;
+
+    location / {
+      return 200 "Hello from Re-encrypt TLS\n";
+    }
+  }
+}'
+
+3. Deploy NGINX
+
+oc create deployment nginx --image=nginx
+
+3.1 Mount TLS certificate:
+
+oc set volume deployment/nginx --add --name=tls --secret-name=backend-tls --mount-path=/etc/nginx/tls
+
+3.2 Mount configMap in deployment
+
+oc set volume deployment/nginx --add --name=config --configmap-name=nginx-conf --mount-path=/etc/nginx/nginx.conf --sub-path=nginx.conf
+
+
+4. Create Service
+
+oc expose deployment nginx --port=8443 --target-port=8443
+
+################  TLS FOR ROUTE #######################
+5. Generate Route Certificate (for Router)
+
+openssl req -x509 -newkey rsa:2048 -nodes -keyout route.key -out route.crt -days 365 -subj "/CN=tlsapp.apps-crc.testing"
+
+6. Create Re-encrypt Route
+
+oc create route reencrypt nginx \
+--service=nginx \
+--hostname=tlsapp.apps-crc.testing \
+--cert=route.crt \
+--key=route.key \
+--dest-ca-cert=backend.crt \
+--port=8443
+
+6.1 Important option:
+--dest-ca-cert
+
+7. test
+
+curl -vk https://tlsapp.apps-crc.testing
+
+Hello from Re-encrypt TLS
+
+
+
+
+

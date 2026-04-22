@@ -1,0 +1,24 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tlsapp
+    app.kubernetes.io/component: tlsapp
+    app.kubernetes.io/instance: tlsapp
+  name: tlsapp
+spec:
+  host: tlsapp.apps-crc.testing
+  port:
+    targetPort: 80-tcp
+  tls:
+    certificate: "-----BEGIN CERTIFICATE-----\r\nMIIDJTCCAg2gAwIBAgIUKfkObIxQw+7rIiJ/lZhLS+U6CaswDQYJKoZIhvcNAQEL\r\nBQAwIjEgMB4GA1UEAwwXdGxzYXBwLmFwcHMtY3JjLnRlc3RpbmcwHhcNMjYwNDIy\r\nMDI1MjQ3WhcNMjcwNDIyMDI1MjQ3WjAiMSAwHgYDVQQDDBd0bHNhcHAuYXBwcy1j\r\ncmMudGVzdGluZzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM9rhK0a\r\nmDJG9NaaJ57hZr0sl2ClAv3kyJi9xD5SYZO9qU/5jq2mOVBsyAGIa+PEucVias9u\r\n2QtzxiGJHoZcu+DqFa7MPN/udqLWciPRud08BB2Vv0KbWFrePLklQaE6cpDnQtc2\r\nMUt0+IXNriBPTNk8F/AELV24NMPlJNs1TSXKcpUng9j7cyVJe04ZG9elUgWLZ2kW\r\nkdr4VcP9NutXEsUyE5BRjS2GhCaQ3TZCjwrtAPpO6e/ul2IZHlEO2uzae0xIDbTu\r\nSSEgknjtts165PXUf/V5YBpejZysHiAMglWfKmFxGqHzx+kJCiE64qIDnGSGUYo9\r\nNfIUSyW9ZSvXjH8CAwEAAaNTMFEwHQYDVR0OBBYEFIqCUA98CoPB+ySLX2uUa5xe\r\nujwxMB8GA1UdIwQYMBaAFIqCUA98CoPB+ySLX2uUa5xeujwxMA8GA1UdEwEB/wQF\r\nMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAByO7aOCzVSL4k4WoMlYinxPi17d7y8W\r\nyuvacTw0E+bnLf0xP36iVYeF8XYr3Vj4u9L/NBDQS+iLw3YtDmF1DclQ3M8cOE0b\r\nGTrzqW83mTvu3iCrNgORsVW25KHk5OU7DUYyQix1yF7iFYsxVcgNkcarHcKsP8To\r\nNhSdUwld5/Bmn+KMDyDUL+KdrbBYnE6DwWDMBwwPvMMF8PcFI8zzJXA9EzVvBFib\r\nVLYWw+5Ke8/uymd2cw05AcLBgfvDcllDEB/wYTj6YBaaEqy0RLbiL0UmKDkBvp+q\r\n4xY48wtQGPnxp9AQTkfgOl/rynMic6ZUqGyux/d6Lvm5pzp7Vl/XwEY=\r\n-----END
+      CERTIFICATE-----\r\n"
+    key: "-----BEGIN PRIVATE KEY-----\r\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDPa4StGpgyRvTW\r\nmiee4Wa9LJdgpQL95MiYvcQ+UmGTvalP+Y6tpjlQbMgBiGvjxLnFYmrPbtkLc8Yh\r\niR6GXLvg6hWuzDzf7nai1nIj0bndPAQdlb9Cm1ha3jy5JUGhOnKQ50LXNjFLdPiF\r\nza4gT0zZPBfwBC1duDTD5STbNU0lynKVJ4PY+3MlSXtOGRvXpVIFi2dpFpHa+FXD\r\n/TbrVxLFMhOQUY0thoQmkN02Qo8K7QD6Tunv7pdiGR5RDtrs2ntMSA207kkhIJJ4\r\n7bbNeuT11H/1eWAaXo2crB4gDIJVnyphcRqh88fpCQohOuKiA5xkhlGKPTXyFEsl\r\nvWUr14x/AgMBAAECggEAOOT0nSjc03msIgthz85jCIPpN+y7T9pH/cGbyT5+nnBZ\r\nN2MsNEySjxFvoSAC/BSTomVXB/QPW/lTQRKkCVX5gP2kmfBSyFfYOd1ZrKKT+W/D\r\nbzwKnOIQj8hC3sQt5uQp1b5hkre+OMTqgIVE/H7UBQhbRo5WxUzISG2buPc7ZKBP\r\nbrZpQ8BqfpoBeXbv/dN03GLca0S+JdCWxLYStX7luXSBxdoSQ8pzvMZhJtBnFJsI\r\n+fsR4SiBdOEhqbJUyd29tCX69B1DbFDYkT9DceyhJaGt5V8nHDFIQN17kUcpYEgH\r\nf6it481syFWYWQ0fIR18YjpPOfoeWW66Y5Ijbi9cpQKBgQDsIr5r4zvK0PAnbowZ\r\ngL2j1H+2W5xfUR5hKbaT+DayCILNkZ+vJMxMwbx+x395tlP6XEV/rfPtAcysBMqH\r\nZ66D9KJzYYEaVMrvnGYT7J5FkPgWRROW4fHo6NxrIYVmYd7pHIwgWZxV+TuBU5+j\r\nPB3Z2Olr3EhMtB8ezM+Yg5f4hQKBgQDg3l9TINMV619twZ//+MRPitEM+30nUN7a\r\nZwLhPsPaKAWBY2L+L0gE1fMmxQoL+zML1ElYFUzcpAinCLrcISh4FLZiWdw5mxfT\r\nWZ+hGHibvp+RjjRoACVu1ZvJBzfxOwNsxaoa/nZ+9qA++gf1nsCXaCosgIuAyPCY\r\n7BYCJCACMwKBgD+E1Q42cNYMwB0LSpptnBWeyr/mArlNG8vtKZTCFwxq56yeeILn\r\ndiFLmAXOakb2Ob7F5VgEFfJyInk/TK+Bv1r1imFZIB5SIsiznG3Nn4F9Do8HA875\r\ndlY9lVUoDjdNKmYwbK0jDb++rDgMo4uIV0tLYvbFqZkgdqKVW15eP5n1AoGAE4GW\r\nuUpOpUcepxG1xGma9d9v1PV33NI6Eq3+5PUh3im8mIW7j5sgXzMD/af4ACQRQIRw\r\nvFBUs4sTKRIry26g6RG65HsxDFo0zeOnYj0SMUhu5Rx11VO165BiDCUxKB7bZDMd\r\nV2wdcVQJgI0F5buYr0mc5vFbqJdFr65DFnp1wFsCgYAGUFhd+4d2CGMV4HeOk1vR\r\nbngeaIVb3EnST+qD6XnKEs0KywIN+zvDxoZD0iUTqLP6uYxB0DUP3VdqBr7IJjsB\r\nnxZAfAKJwhsv/v8uAI5ycmx1GUlLW6FtO8Qj97OPiSLh3TJpMAg9gKpAJBMJNxGS\r\n52L6Uj8tNbm2IGbbLmJCdw==\r\n-----END
+      PRIVATE KEY-----\r\n"
+    termination: edge
+  to:
+    kind: ""
+    name: tlsapp
+    weight: null
+status: {}

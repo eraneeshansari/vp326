@@ -1,0 +1,47 @@
+. Create Self-Signed Certificate
+
+openssl req -x509 -newkey rsa:2048 -nodes \
+-keyout tls.key -out tls.crt -days 365 \
+-subj "/CN=tlsapp.apps-crc.testing"
+
+2. Create Secret for TLS
+
+oc create secret tls nginx-tls --cert=tls.crt --key=tls.key
+
+3. Create NGINX ConfigMap (HTTPS Config)
+
+oc create configmap nginx-conf --from-literal=nginx.conf='
+events {}
+http {
+  server {
+    listen 8443 ssl;
+    server_name tlsapp.apps-crc.testing;
+
+    ssl_certificate /etc/nginx/tls/tls.crt;
+    ssl_certificate_key /etc/nginx/tls/tls.key;
+
+    location / {
+      return 200 "Hello from Passthrough TLS\n";
+    }
+  }
+}'
+
+4. Deploy HTTPS NGINX Pod
+
+oc create deployment nginx --image=nginx
+
+4.1 Mount the config and certificate:
+
+oc set volume deployment/nginx --add --name=tls --secret-name=nginx-tls --mount-path=/etc/nginx/tls
+
+oc set volume deployment/nginx --add --name=config --configmap-name=nginx-conf --mount-path=/etc/nginx/nginx.conf --sub-path=nginx.conf
+
+5. Expose Service (HTTPS Port)
+
+oc expose deployment nginx --port=8443 --target-port=8443
+
+6. Create Passthrough Route
+
+oc create route passthrough nginx --service=nginx --hostname=tlsapp.apps-crc.testing --port=8443
+
+
