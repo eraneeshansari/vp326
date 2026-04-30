@@ -1,0 +1,16 @@
+apiVersion: quota.openshift.io/v1
+kind: ClusterResourceQuota
+metadata:
+  name: r-envdev
+spec:
+  quota:
+    hard:
+      configmaps: "20"
+      count/pods: "10"
+      count/secrets: "15"
+      cpu: "2"
+      memory: 2Gi
+  selector:
+    labels:
+      matchLabels:
+        env: dev

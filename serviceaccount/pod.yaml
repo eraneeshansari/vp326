@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: a3
+  name: a3
+spec:
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+  - image: nginx
+    name: a3
+
+#Error from server (Forbidden): pods "a3" is forbidden: violates PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "a3" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "a3" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "a3" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "a3" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+
+

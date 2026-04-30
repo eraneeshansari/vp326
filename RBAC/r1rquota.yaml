@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: r1quota
+spec:
+  hard:
+    count/configmaps: "10"
+    count/pods: "10"
+    count/secrets: "10"
+    cpu: "2"
+    memory: 2Gi
